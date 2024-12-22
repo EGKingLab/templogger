@@ -35,6 +35,7 @@ streamer = Streamer(bucket_name = BUCKET_NAME,
                     bucket_key = BUCKET_KEY,
                     access_key = ACCESS_KEY)
 
+# Read from dhtSensor. Keep trying until success
 while True:
     try:
         humidity = dhtSensor.humidity
@@ -43,12 +44,14 @@ while True:
     except RuntimeError:
         time.sleep(2)
 
+# Convert and generate output info
 if METRIC_UNITS:
     streamer.log(SENSOR_LOCATION_NAME + " Temperature (C)", str(temp_c))
 else:
     temp_f = format(temp_c * 9.0 / 5.0 + 32.0, ".2f")
     streamer.log(SENSOR_LOCATION_NAME + " Temperature (F)", temp_f)
 
+# Log to streamer
 streamer.log(SENSOR_LOCATION_NAME + " Humidity (%)", str(humidity))
 streamer.flush()
 
@@ -57,17 +60,17 @@ if float(temp_c) >= float(TEMP_ALARM):
     alarm_message = f"Temperature in {SENSOR_LOCATION_NAME} is {temp_c:.1f}"
 
     requests.post(URL_ALARM,
-                    data=alarm_message.encode(encoding='utf-8'),
-                    headers={"Title": "Temperature Alarm",
-                            "Priority": "urgent",
-                            "Tags": "warning"})
+                  data=alarm_message.encode(encoding = 'utf-8'),
+                  headers={"Title": "Temperature Alarm",
+                           "Priority": "urgent",
+                           "Tags": "warning"})
 
 # Humidity alarm
 if float(humidity) <= float(HUMIDITY_ALARM):
     alarm_message = f"Humidity in {SENSOR_LOCATION_NAME} is {humidity:.1f}"
 
     requests.post(URL_ALARM,
-                    data=alarm_message.encode(encoding='utf-8'),
-                    headers={"Title": "Humidity Alarm",
+                  data = larm_message.encode(encoding='utf-8'),
+                  headers = {"Title": "Humidity Alarm",
                             "Priority": "urgent",
                             "Tags": "warning"})
