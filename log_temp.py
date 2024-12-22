@@ -40,7 +40,7 @@ try:
     humidity = dhtSensor.humidity
     temp_c = dhtSensor.temperature
 except RuntimeError:
-    continue
+    pass
 
 try:
     if METRIC_UNITS:
@@ -52,7 +52,7 @@ try:
     streamer.log(SENSOR_LOCATION_NAME + " Humidity (%)", humidity)
     streamer.flush()
 except TypeError:
-    continue
+    pass
 
 # Temperature alarm
 if float(temp_c) >= TEMP_ALARM:
