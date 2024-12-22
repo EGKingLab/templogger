@@ -20,15 +20,16 @@ def get_ip():
         s.close()
     return IP
 
-# --------- Server Settings ---------
-file = open("settings.txt")
-settings = file.readlines()
-file.close()
 
 # --------- Sensor Settings ---------
 MINUTES_BETWEEN_READS = 2
 METRIC_UNITS = True
 # -----------------------------------
+
+# --------- Server Settings ---------
+file = open("settings.txt")
+settings = file.readlines()
+file.close()
 
 # --------- Local settings ---------
 SENSOR_LOCATION_NAME = settings[0].strip()
