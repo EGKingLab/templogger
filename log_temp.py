@@ -43,21 +43,17 @@ while True:
     except RuntimeError:
         time.sleep(2)
 
+if METRIC_UNITS:
+    streamer.log(SENSOR_LOCATION_NAME + " Temperature (C)", str(temp_c))
+else:
+    temp_f = format(temp_c * 9.0 / 5.0 + 32.0, ".2f")
+    streamer.log(SENSOR_LOCATION_NAME + " Temperature (F)", temp_f)
 
-try:
-    if METRIC_UNITS:
-        streamer.log(SENSOR_LOCATION_NAME + " Temperature (C)", temp_c)
-    else:
-        temp_f = format(temp_c * 9.0 / 5.0 + 32.0, ".2f")
-        streamer.log(SENSOR_LOCATION_NAME + " Temperature (F)", temp_f)
-    humidity = format(humidity,".2f")
-    streamer.log(SENSOR_LOCATION_NAME + " Humidity (%)", humidity)
-    streamer.flush()
-except TypeError:
-    pass
+streamer.log(SENSOR_LOCATION_NAME + " Humidity (%)", str(humidity))
+streamer.flush()
 
 # Temperature alarm
-if float(temp_c) >= TEMP_ALARM:
+if float(temp_c) >= float(TEMP_ALARM):
     alarm_message = f"Temperature in {SENSOR_LOCATION_NAME} is {temp_c:.1f}"
 
     requests.post(URL_ALARM,
@@ -67,7 +63,7 @@ if float(temp_c) >= TEMP_ALARM:
                             "Tags": "warning"})
 
 # Humidity alarm
-if float(humidity) <= HUMIDITY_ALARM:
+if float(humidity) <= float(HUMIDITY_ALARM):
     alarm_message = f"Humidity in {SENSOR_LOCATION_NAME} is {humidity:.1f}"
 
     requests.post(URL_ALARM,
