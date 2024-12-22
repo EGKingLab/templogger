@@ -35,12 +35,14 @@ streamer = Streamer(bucket_name = BUCKET_NAME,
                     bucket_key = BUCKET_KEY,
                     access_key = ACCESS_KEY)
 
+while True:
+    try:
+        humidity = dhtSensor.humidity
+        temp_c = dhtSensor.temperature
+        break
+    except RuntimeError:
+        time.sleep(2)
 
-try:
-    humidity = dhtSensor.humidity
-    temp_c = dhtSensor.temperature
-except RuntimeError:
-    pass
 
 try:
     if METRIC_UNITS:
