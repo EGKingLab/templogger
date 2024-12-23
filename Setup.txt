@@ -1,0 +1,23 @@
+#############################################################################
+nano update_templogger.sh
+
+#!/bin/bash
+
+wget -O templogger.py https://raw.githubusercontent.com/EGKingLab/templogger/refs/heads/main/templogger.py
+wget -O check_ip.py https://raw.githubusercontent.com/EGKingLab/templogger/refs/heads/main/check_ip.py
+wget -O log_temp.py https://raw.githubusercontent.com/EGKingLab/templogger/refs/heads/main/log_temp.py
+
+
+
+#############################################################################
+crontab -e
+
+0 12 * * * /usr/bin/python3 /home/dietpi/check_ip.py
+*/5 * * * * /usr/bin/python3 /home/dietpi/log_temp.py
+
+
+
+#############################################################################
+sudo crontab -e
+
+0 11 * * * /sbin/reboot
